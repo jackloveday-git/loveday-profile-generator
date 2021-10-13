@@ -12,8 +12,9 @@ const Intern = require('./lib/Intern');
 const fs = require('fs');
 const inquirer = require('inquirer');
 
-// Initialize Team Array
+// Initialize Team Array & Globals
 const teamArray = [];
+let counter = 1;
 
 
 // Manager Inquirer Prompts
@@ -25,10 +26,11 @@ const addManager = () => {
             type: 'input',
             name: 'name',
             message: 'Enter the Team Managers Name:',
-            validate: nameInput => {
-                if (nameInput) return true;
-                console.log('Please enter an appropriate name.');
-                return false;
+            validate: input => {
+                if (!input) return 'Please enter a valid First & Last Name.';
+                let valid = input.match(/^[a-zA-Z]+ [a-zA-Z]+$/g);
+                if (valid) return true;
+                return 'Please enter a valid Full Name.';
             }
         },
         {
@@ -36,11 +38,12 @@ const addManager = () => {
             type: 'input',
             name: 'id',
             message: 'Enter the Managers ID:',
-            validate: nameInput => {
-                if (isNaN(nameInput)) {
-                    console.log('ID must be an integer.');
-                    return false;
-                }
+            validate: input => {
+                if (!input) return 'ID must exist.';
+                if (isNaN(input)) return 'ID must be a number.';
+                if (input < counter) return `ID must be greater than ${counter - 1}`;
+                let valid = input.match(/^([+-]?[1-9]\d*|0)$/);
+                if (!valid) return 'ID must be an integer.';
                 return true;
             }
         },
@@ -50,10 +53,9 @@ const addManager = () => {
             name: 'email',
             message: 'Enter the Managers Email:',
             validate: email => {
-                valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
+                let valid = email.match(/\S+@\S+\.\S+/g);
                 if (valid) return true;
-                console.log('Enter a valid Email Address.');
-                return false;
+                return 'Enter a valid Email Address.';
             }
         },
         {
@@ -61,14 +63,14 @@ const addManager = () => {
             type: 'input',
             name: 'officeNumber',
             message: 'Enter the Office Number:',
-            validate: nameInput => {
-                if (isNaN(nameInput)) {
-                    console.log('Office Number must be an integer.');
-                    return false;
-                }
+            validate: input => {
+                if (!input) return 'ID must exist.';
+                if (isNaN(input)) return 'ID must be a number.';
+                let valid = input.match(/^([+-]?[1-9]\d*|0)$/);
+                if (!valid) return 'ID must be an integer.';
                 return true;
             }
-        }
+        },
     ])
         .then(managerInput => {
             // Then, let's create the Manager from our input
@@ -99,10 +101,11 @@ const addEmployee = () => {
             type: 'input',
             name: 'name',
             message: 'Enter the Employees Name:',
-            validate: nameInput => {
-                if (nameInput) return true;
-                console.log('Please enter an appropriate name.');
-                return false;
+            validate: input => {
+                if (!input) return 'Please enter a valid First & Last Name.';
+                let valid = input.match(/^[a-zA-Z]+ [a-zA-Z]+$/g);
+                if (valid) return true;
+                return 'Please enter a valid Full Name.';
             }
         },
         {
@@ -110,11 +113,13 @@ const addEmployee = () => {
             type: 'input',
             name: 'id',
             message: 'Enter the Employee ID:',
-            validate: nameInput => {
-                if (isNaN(nameInput)) {
-                    console.log('ID must be an integer.');
-                    return false;
-                }
+            validate: input => {
+                if (!input) return 'ID must exist.';
+                if (isNaN(input)) return 'ID must be a number.';
+                if (input < counter) return `ID must be greater than ${counter - 1}`;
+                let valid = input.match(/^([+-]?[1-9]\d*|0)$/);
+                if (!valid) return 'ID must be an integer.';
+                counter++;
                 return true;
             }
         },
@@ -124,10 +129,9 @@ const addEmployee = () => {
             name: 'email',
             message: 'Enter the Employees Email:',
             validate: email => {
-                valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
+                let valid = email.match(/\S+@\S+\.\S+/g);
                 if (valid) return true;
-                console.log('Enter a valid Email Address.');
-                return false;
+                return 'Enter a valid Email Address.';
             }
         },
         {
@@ -135,9 +139,12 @@ const addEmployee = () => {
             type: 'input',
             name: 'school',
             message: 'Enter the Interns School Name:',
-            validate: nameInput => {
-                if (nameInput) return true;
-                console.log('Enter a valid School Name.');
+            when: (input) => input.role === 'Intern',
+            validate: input => {
+                if (!input) return 'Please enter a valid Name.';
+                let valid = input.match(/^[a-zA-Z]+$/);
+                if (valid) return true;
+                return 'Please enter a valid Name.';
             }
         },
         {
@@ -146,9 +153,9 @@ const addEmployee = () => {
             name: 'github',
             message: 'Enter the Employees Github Username:',
             when: (input) => input.role === 'Engineer',
-            validate: nameInput => {
-                if (nameInput) return true;
-                console.log('Enter a valid Github Username.');
+            validate: github => {
+                if (github) return true;
+                return 'Enter a valid Github Username.';
             }
         },
         {
@@ -185,7 +192,7 @@ const addEmployee = () => {
 
 // Function to write our HTML page
 const writeFile = (data) => {
-    fs.writeFile('', data, err => {
+    fs.writeFile('./dist/index.html', data, err => {
         // Check for Error
         if (err) { console.log(err); return; }
         console.log('Team Profile has been created.');

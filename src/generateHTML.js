@@ -1,7 +1,7 @@
 // generateHTML.js by Jack Loveday
 
 // Create Manager's Card
-const genrateManager = (manager) => {
+const generateManager = (manager) => {
     return `
     <div class="col-4 mt-4">
         <div class="card h-100">
