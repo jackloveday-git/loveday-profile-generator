@@ -162,7 +162,7 @@ const addEmployee = () => {
             // Ask User if they want to add additional Team Members
             type: 'confirm',
             name: 'confirmAddEmployee',
-            message: 'Would youb like to add another Team Member?',
+            message: 'Would you like to add another Team Member?',
             default: false
         }
     ])
