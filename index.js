@@ -113,7 +113,6 @@ const addEmployee = () => {
                 if (isNaN(input)) return 'ID must be a number.';
                 let valid = input.match(/^([+-]?[1-9]\d*|0)$/);
                 if (!valid) return 'ID must be an integer.';
-                counter++;
                 return true;
             }
         },
