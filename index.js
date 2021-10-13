@@ -151,7 +151,7 @@ const addEmployee = () => {
                 console.log('Enter a valid Github Username.');
             }
         },
-        {  
+        {
             // Ask User if they want to add additional Team Members
             type: 'confirm',
             name: 'confirmAddEmployee',
@@ -159,27 +159,27 @@ const addEmployee = () => {
             default: false
         }
     ])
-    .then(employeeData => {
-        // Create the Employee from Input
-        let { name, id, email, role, github, school, confirmAddEmployee } = employeeData;
-        let employee; 
+        .then(employeeData => {
+            // Create the Employee from Input
+            let { name, id, email, role, github, school, confirmAddEmployee } = employeeData;
+            let employee;
 
-        // Check if its either an Engineer, or Intern, and create new
-        if (role === 'Engineer') {
-            employee = new Engineer(name, id, email, github);
-            console.log(employee);
-        } else if (role === 'Intern') {
-            employee = new Intern(name, id, email, school);
-            console.log(employee);
-        }
+            // Check if its either an Engineer, or Intern, and create new
+            if (role === 'Engineer') {
+                employee = new Engineer(name, id, email, github);
+                console.log(employee);
+            } else if (role === 'Intern') {
+                employee = new Intern(name, id, email, school);
+                console.log(employee);
+            }
 
-        // Push to Team Array
-        teamArray.push(employee);
+            // Push to Team Array
+            teamArray.push(employee);
 
-        // If we confirmed adding another...
-        if (confirmAddEmployee) return addEmployee(teamArray);
-        return teamArray;
-    })
+            // If we confirmed adding another...
+            if (confirmAddEmployee) return addEmployee(teamArray);
+            return teamArray;
+        })
 }
 
 
@@ -193,5 +193,8 @@ const writeFile = (data) => {
 }
 
 // Call Manager Prompts here
-//
-//
+addManager()
+    .then(addEmployee)
+    .then(teamArray => { return generateHTML(teamArray) })
+    .then(pageHTML => { return writeFile(pageHTML) })
+    .catch(err => { console.log(err) });
