@@ -111,7 +111,6 @@ const addEmployee = () => {
             validate: input => {
                 if (!input) return 'ID must exist.';
                 if (isNaN(input)) return 'ID must be a number.';
-                if (input < counter) return `ID must be greater than ${counter - 1}`;
                 let valid = input.match(/^([+-]?[1-9]\d*|0)$/);
                 if (!valid) return 'ID must be an integer.';
                 counter++;
