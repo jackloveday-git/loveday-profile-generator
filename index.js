@@ -1,12 +1,12 @@
 // index.js by Jack Loveday
 
 // Link to HTML Creation
-const generateHTML = require();
+const generateHTML = require('./src/generateHTML');
 
 // Team Profile Classes
-const Manager = require();
-const Engineer = require();
-const Intern = require();
+const Manager = require('./lib/Manager');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
 
 // Import Node Modules
 const fs = require('fs');
