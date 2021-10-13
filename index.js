@@ -14,7 +14,6 @@ const inquirer = require('inquirer');
 
 // Initialize Team Array & Globals
 const teamArray = [];
-let counter = 1;
 
 
 // Manager Inquirer Prompts
@@ -41,7 +40,6 @@ const addManager = () => {
             validate: input => {
                 if (!input) return 'ID must exist.';
                 if (isNaN(input)) return 'ID must be a number.';
-                if (input < counter) return `ID must be greater than ${counter - 1}`;
                 let valid = input.match(/^([+-]?[1-9]\d*|0)$/);
                 if (!valid) return 'ID must be an integer.';
                 return true;
@@ -70,7 +68,7 @@ const addManager = () => {
                 if (!valid) return 'ID must be an integer.';
                 return true;
             }
-        },
+        }
     ])
         .then(managerInput => {
             // Then, let's create the Manager from our input
@@ -79,9 +77,6 @@ const addManager = () => {
 
             // Add it to our Team Array
             teamArray.push(manager);
-
-            // Log it for testing purposes
-            console.log(manager);
         })
 };
 
@@ -141,9 +136,7 @@ const addEmployee = () => {
             message: 'Enter the Interns School Name:',
             when: (input) => input.role === 'Intern',
             validate: input => {
-                if (!input) return 'Please enter a valid Name.';
-                let valid = input.match(/^[a-zA-Z]+$/);
-                if (valid) return true;
+                if (input) return true;
                 return 'Please enter a valid Name.';
             }
         },
@@ -174,10 +167,8 @@ const addEmployee = () => {
             // Check if its either an Engineer, or Intern, and create new
             if (role === 'Engineer') {
                 employee = new Engineer(name, id, email, github);
-                console.log(employee);
             } else if (role === 'Intern') {
                 employee = new Intern(name, id, email, school);
-                console.log(employee);
             }
 
             // Push to Team Array
